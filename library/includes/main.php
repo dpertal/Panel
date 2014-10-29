@@ -1,0 +1,1 @@
+<?php Morfy::factory()->runAction('files'); ?>

@@ -4,6 +4,10 @@
 ---
 
 
+[Demo](http://monchovarela.es/morfy/panel)
+
+**Pass:** _demo_
+
 **Config file settings:**
 
     <?php

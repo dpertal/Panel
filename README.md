@@ -8,7 +8,7 @@
 
 **Pass:** _demo_
 
-**Note:** you need and panel.md file inside content folder.
+**Note:** you need add panel.md file inside content folder.
 
 
 **Config file settings:**

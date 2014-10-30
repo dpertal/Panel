@@ -23,7 +23,7 @@
             'email' => 'demo@gmail.com',
 
             // panel options
-            'Panel_lang' => 'es', // language es or en
+            'Panel_lang' => 'es', // language  see library/language
             'password' => 'demo',
             'secret_key_1' => '12sdf3321a321asdfas', // secret key for md5
             'secret_key_2' => '4561dsf232gdfd1asdf3', // secret key for md5

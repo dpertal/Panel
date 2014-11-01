@@ -13,7 +13,7 @@
 			<?php if (!empty($_SESSION['login'])) {?>
 					<nav>
 						<ul class="menu">
-              <li><a href="panel"><i class="fa fa-home"></i> &nbsp; <?php echo $lang['Home']; ?></a></li>
+              <li><a href="/panel"><i class="fa fa-home"></i> &nbsp; <?php echo $lang['Home']; ?></a></li>
               <li><a href="?get=images"><i class="fa fa-image"></i> &nbsp; <?php echo $lang['Images']; ?></a></li>
               <li><a href="?get=uploads"><i class="fa fa-file-image-o"></i> &nbsp; <?php echo $lang['New Image']; ?></a></li>
               <li><a href="?get=new"><i class="fa fa-edit"></i> &nbsp; <?php echo $lang['New Page']; ?></a></li>

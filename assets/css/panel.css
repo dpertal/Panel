@@ -142,7 +142,7 @@ body {
     color: #7D6FC0 !important;
 }
 
-#morfy_panel .custom-modal-overlay {
+.custom-modal-overlay {
   position: fixed;
   top: 0;
   right: 0;
@@ -152,7 +152,7 @@ body {
   background-color: #FFF;
   background-color: rgba(255, 255, 255, 0.72)
 }
-#morfy_panel .custom-modal {
+.custom-modal {
   position: absolute;
   top: 20%;
   left: 50%;
@@ -163,27 +163,27 @@ body {
   background-color: #FFFFFF;
   border: 1px solid #CACACA
 }
-#morfy_panel .custom-modal-header {
+.custom-modal-header {
   margin: -1.2em -1.2em 0;
   padding: 0.5em 0.7em;
   background-color: #4028B2;
   color: #F2F2F2;
   font-weight: normal
 }
-#morfy_panel .custom-modal-content {
+.custom-modal-content {
   margin: 1.2em 0
 }
-#morfy_panel .custom-modal input, .custom-modal button {
+.custom-modal input, .custom-modal button {
   background-color: #F6F5F9;
   color: #A3A3A3;
   border: 1px solid #D3D3D3;
   padding: 5px
 }
-#morfy_panel .custom-modal input {
+.custom-modal input {
   display: block;
   width: 96%
 }
-#morfy_panel .custom-modal button {
+.custom-modal button {
   padding-right: 10px;
   padding-left: 10px;
   background: #2F2FA8;
@@ -194,7 +194,7 @@ body {
   -webkit-transition: all 0.5s ease;
   transition: all 0.5s ease
 }
-#morfy_panel .custom-modal button:focus, .custom-modal button:hover {
+.custom-modal button:focus, .custom-modal button:hover {
   background-color: #5D40C7;
   -webkit-transition: all 0.5s ease;
   transition: all 0.5s ease

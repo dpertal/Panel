@@ -7,7 +7,7 @@
 
 **Pass:** _demo_
 
-**Note:** you need and panel.md file inside content folder and make public/images folder with cmod 755.
+**Note:** you need and **panel.md** file inside content folder and make **public/images** folder with **cmod 755**.
 
 **Config file settings:**
 

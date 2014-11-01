@@ -37,9 +37,9 @@ Morfy::factory()->addAction('theme_header', function () {
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="'.Morfy::$config['site_url'].'/plugins/panel/assets/css/panel.css" />
-		<script rel="javascript" src="'.Morfy::$config['site_url'].'/plugins/panel/assets/js/panel.js"></script>';
+        <script rel="javascript" src="'.Morfy::$config['site_url'].'/plugins/panel/assets/js/panel.js"></script>';
     // only load in panel
-    if (stripos($_SERVER['REQUEST_URI'], '/panel')) {
+     if(trim(Morfy::factory()->getUrl(), '/') == 'panel') {
         echo $editor_styles;
     };
 });
@@ -55,8 +55,8 @@ Morfy::factory()->addAction('theme_content_after', function () {
     // require language
     require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
 
-    if (stripos($_SERVER['REQUEST_URI'], '/panel')) {
-       
+    if(trim(Morfy::factory()->getUrl(), '/') == 'panel') {
+
         Morfy::factory()->runAction('panel');
 
         // use default if empty in config.php
@@ -77,9 +77,9 @@ Morfy::factory()->addAction('theme_content_after', function () {
                             Panel::Cookie_set('login',10);
                             Panel::isLogin();
                             // redirect if true
-                            Panel::Notification('Success',$lang['Hello Admin'],Panel::Root('panel'));
+                            Panel::Notification('success','Success',$lang['Hello Admin'],Panel::Root('panel'));
                     }else{
-                        Panel::Notification('Error',$lang['You need provide a password'],Panel::Root('panel'));
+                        Panel::Notification('error','Error',$lang['You need provide a password'],Panel::Root('panel'));
                     }
                 break;
                 case 'logout':
@@ -115,7 +115,7 @@ Morfy::factory()->addAction('files', function () {
         if (!empty($file) || (!Panel::Request_Post('token'))) {
             unlink($file);
             // show Notification
-            Panel::Notification('Success',$lang['The File'].' '.Panel::Request_Get('deleteFile').' '.$lang['has been deleted'],Panel::Root('panel'));
+            Panel::Notification('success','Success',$lang['The File'].' '.Panel::Request_Get('deleteFile').' '.$lang['has been deleted'],Panel::Root('panel'));
         }
     }else if (Panel::Request_Get('saveFile')) {
         // get content
@@ -129,7 +129,7 @@ Morfy::factory()->addAction('files', function () {
             Panel::setContent(CONTENT_PATH.'/'.Panel::seoLink($filename).'.md',$content);
         }
         // show Notification
-        Panel::Notification('Success',$lang['The File'].' '.$filename.' '.$lang['has been save'],Panel::Root('panel'));
+        Panel::Notification('success','Success',$lang['The File'].' '.$filename.' '.$lang['has been save'],Panel::Root('panel'));
     }else if (Panel::Request_Get('updateFile')) {
         // name of file
         $filename = Panel::Request_Get('updateFile');
@@ -138,7 +138,7 @@ Morfy::factory()->addAction('files', function () {
         // save
         Panel::setContent(CONTENT_PATH.'/'.$filename.'.md',$content);
         // show Notification
-        Panel::Notification('Success',$lang['The File'].' '.$filename.' '.$lang['has been save'],Panel::Root('panel'));
+        Panel::Notification('success','Success',$lang['The File'].' '.$filename.' '.$lang['has been save'],Panel::Root('panel'));
     }else{
        Morfy::factory()->runAction('getPages');
        Morfy::factory()->runAction('getBlogPages');
@@ -222,7 +222,7 @@ Morfy::factory()->addAction('deleteImages', function () {
         unlink('public/images/full/'.Panel::Request_Get('deleteImage'));
         unlink('public/images/tumb/'.Panel::Request_Get('deleteImage'));
         // show Notification
-        Panel::Notification('Success',$lang['The File'].' '.Panel::Request_Get('deleteImage').' '.$lang['has been deleted'],Panel::Root('panel?get=images'));
+        Panel::Notification('success','Success',$lang['The File'].' '.Panel::Request_Get('deleteImage').' '.$lang['has been deleted'],Panel::Root('panel?get=images'));
     }
 });
 

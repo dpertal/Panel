@@ -18,7 +18,7 @@ Tags: '.$lang['Tags here'].'
 Template: '.$lang['index'].'
 
 --------
-                ';
+';
                 include_once('includes/add.php');
         		break;
 			case 'uploads':

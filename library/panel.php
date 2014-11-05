@@ -4,7 +4,7 @@
   <!-- Sidebar -->
   <div class="sidebar">
 
-  	<div class="logo">
+  	<div class="panel_logo">
   		<a href="<?php echo Panel::Root('panel'); ?>">
         <img src="<?php echo Panel::Root(); ?>plugins/panel/assets/img/logo.jpg" alt="Mofry Panel">
       </a>

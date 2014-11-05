@@ -7,9 +7,21 @@
 	</div>
 
 	<div class="form-group">
-		<label class="checkbox-inline">
-	      <input name="isBlog" type="checkbox"> <?php echo $lang['Check this if is a blog'];?>
-	  </label>
+		<label>Select Folder</label>
+		<select name="foldername" id="folder" class="form-control">
+			<option>Select Folder</option>
+			<option value="isBlog">Blog</option>
+			<option value="isPortfolio">Portfolio</option>
+		</select>
+		<script>
+			window.addEventListener('load',function(){
+				var folder = document.querySelector('#folder');
+				folder.addEventListener('change',function(){
+					this.name = this.value;
+					console.log(this.name);
+				});
+			});
+		</script>
 	</div>
 
 	<div class="form-group">

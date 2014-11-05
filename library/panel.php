@@ -4,7 +4,7 @@
   <!-- Sidebar -->
   <div class="sidebar">
 
-  	<div class="logo">
+  	<div class="panel_logo">
   		<a href="<?php echo Panel::Root('panel'); ?>">
         <img src="<?php echo Panel::Root(); ?>plugins/panel/assets/img/logo.jpg" alt="Mofry Panel">
       </a>
@@ -30,7 +30,7 @@
 
     <!-- Header  -->
     <header class="header">
-        <a class="header-title pull-left" href="<?php echo Panel::Root('panel'); ?>"><?php echo Panel::Config(Morfy::$config['panel_title'],'MORFY PANEL') ?></a></h1>
+        <a class="header-title pull-left" href="<?php echo Panel::Root('panel'); ?>">MORFY PANEL</a></h1>
         <div class="pull-right well-sm">
 
         <?php if (!empty($_SESSION['login'])){ ?>

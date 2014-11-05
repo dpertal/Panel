@@ -483,14 +483,10 @@ class Panel {
 
 
     /*
-    *   Get Notification Panel::Notification('Success',$filename,Panel::Root('panel'));
+    *   Get Notification Panel::Notification($type,$title,$filename,Panel::Root('panel'));
     */ 
-    public static function Notification($type,$name,$url){
-        if($type == 'Success'){
-            die('<script> notification("'.$type.'", "'.$name.'","'.$url.'");</script>');
-        }else if($type == 'Error'){
-            die('<script> notification("'.$type.'", "'.$name.'","'.$url.'");</script>');
-        }
+    public static function Notification($type,$title,$name,$url){
+        die('<script> notification("'.$type.'", "'.$title.'","'.$name.'","'.$url.'");</script>');
     }
 
 
@@ -527,31 +523,31 @@ class Panel {
             // Check for errors
             if($_FILES['file_upload']['error'] > 0){
                  // show Notification
-                Panel::Notification('Error',$lang['An error ocurred when uploading.'],Panel::Root('panel?get=uploads'));
+                Panel::Notification('error','Error',$lang['An error ocurred when uploading.'],Panel::Root('panel?get=uploads'));
             }
             if(!getimagesize($_FILES['file_upload']['tmp_name'])){
                 // show Notification
-                Panel::Notification('Error',$lang['Please ensure you are uploading an image.'],Panel::Root('panel?get=uploads'));
+                Panel::Notification('error','Error',$lang['Please ensure you are uploading an image.'],Panel::Root('panel?get=uploads'));
             }
             // Check filetype
             if(($_FILES['file_upload']['type'] == 'image/png') || ($_FILES['file_upload']['type'] == 'image/jpg') || ($_FILES['file_upload']['type'] == 'image/gif') || ($_FILES['file_upload']['type'] == 'image/JPG')){
                 // show Notification
-                Panel::Notification('Error',$lang['Unsupported filetype uploaded.'],Panel::Root('panel?get=uploads'));
+                Panel::Notification('error','Error',$lang['Unsupported filetype uploaded.'],Panel::Root('panel?get=uploads'));
             }
             // Check filesize
             if($_FILES['file_upload']['size'] > 41943040){
                 // show Notification
-                Panel::Notification('Error',$lang['File uploaded exceeds maximum upload size.'],Panel::Root('panel?get=uploads'));
+                Panel::Notification('error','Error',$lang['File uploaded exceeds maximum upload size.'],Panel::Root('panel?get=uploads'));
             }
             // Check if the file exists
             if(file_exists($full.$_FILES['file_upload']['name'])){
                 // show Notification
-                Panel::Notification('Error',$lang['File with that name already exists.'],Panel::Root('panel?get=uploads'));
+                Panel::Notification('error','Error',$lang['File with that name already exists.'],Panel::Root('panel?get=uploads'));
             }
             // Upload file
             if(!move_uploaded_file($_FILES['file_upload']['tmp_name'], $full.$name)){
                 // show Notification
-                Panel::Notification('Error',$lang['Error uploading file - check destination is writeable.'],Panel::Root('panel?get=uploads'));
+                Panel::Notification('error','Error',$lang['Error uploading file - check destination is writeable.'],Panel::Root('panel?get=uploads'));
             }
             // ../assests/img/full/name
             $in =  $full.$name;
@@ -632,5 +628,6 @@ class Panel {
         }
         echo $html;
     }
+
 }
 

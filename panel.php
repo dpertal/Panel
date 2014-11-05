@@ -37,7 +37,7 @@ Morfy::factory()->addAction('theme_header', function () {
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="'.Morfy::$config['site_url'].'/plugins/panel/assets/css/panel.css" />
-        <script rel="javascript" src="'.Morfy::$config['site_url'].'/plugins/panel/assets/js/panel.js"></script>';
+		<script rel="javascript" src="'.Morfy::$config['site_url'].'/plugins/panel/assets/js/panel.js"></script>';
     // only load in panel
      if(trim(Morfy::factory()->getUrl(), '/') == 'panel') {
         echo $editor_styles;
@@ -124,6 +124,10 @@ Morfy::factory()->addAction('files', function () {
         if(Panel::Request_Post('isBlog')){
             // save
             Panel::setContent(CONTENT_PATH.'/blog/'.Panel::seoLink($filename).'.md',$content);
+        }else if(Panel::Request_Post('isPortfolio')){
+            $folder = 'portfolio';
+            // save in folder
+            Panel::setContent(CONTENT_PATH.'/'.$folder.'/'.Panel::seoLink($filename).'.md',$content);
         }else{
             // save
             Panel::setContent(CONTENT_PATH.'/'.Panel::seoLink($filename).'.md',$content);
@@ -142,6 +146,7 @@ Morfy::factory()->addAction('files', function () {
     }else{
        Morfy::factory()->runAction('getPages');
        Morfy::factory()->runAction('getBlogPages');
+       Morfy::factory()->runAction('getPortfolioPages');
     }
 });
 
@@ -186,22 +191,23 @@ Morfy::factory()->addAction('getPages', function () {
 Morfy::factory()->addAction('getBlogPages', function () {
     // require language
     require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
+    $folder = 'blog'; // name of new folder here
     // show blog files
-    $blog_path_dir = CONTENT_PATH.'/blog';
-    $blog_files = Panel::File_scan($blog_path_dir);
+    $folder_path_dir = CONTENT_PATH.'/'.$folder;
+    $folder_files = Panel::File_scan($folder_path_dir);
     $html = '<h5 class="divider">'.$lang['Blog'].':</h5>';
-    foreach ($blog_files as $blog_file) {
-        if(is_file($blog_path_dir.'/'.$blog_file)){
+    foreach ($folder_files as $folder_file) {
+        if(is_file($folder_path_dir.'/'.$folder_file)){
             // get blog pages    
-            $blog_filename =  str_replace('.md','',$blog_file);
+            $folder_filename =  str_replace('.md','',$folder_file);
             // not show index
-            if($blog_filename != 'index'){
+            if($folder_filename != 'index'){
              $html .= '<div class="tumb-grid">
-                <a target="_blank" href="'.Morfy::$config['site_url'].'/blog/'.$blog_filename .'" class="tumb">'.$blog_filename .'</a>
+                <a target="_blank" href="'.Morfy::$config['site_url'].'/'.$folder.'/'.$folder_filename .'" class="tumb">'.$folder_filename .'</a>
                  <div class="desc"> 
                     <ul>
-                        <li><a class="btn btn-primary btn-sm" href="?editFile=blog/'.$blog_filename .'"><i class="fa fa-edit"></i> &nbsp; '.$lang['Edit'].'</a></li>
-                        <li><a onclick="return confirmDelete(\' '.$lang['Are you sure'].'\')" class="btn btn-danger btn-sm" href="?deleteFile=blog/'.$blog_filename .'"><i class="fa fa-trash-o"></i> &nbsp; '.$lang['Delete'].'</a></li>
+                        <li><a class="btn btn-primary btn-sm" href="?editFile='.$folder.'/'.$folder_filename .'"><i class="fa fa-edit"></i> &nbsp; '.$lang['Edit'].'</a></li>
+                        <li><a onclick="return confirmDelete(\' '.$lang['Are you sure'].'\')" class="btn btn-danger btn-sm" href="?deleteFile='.$folder.'/'.$folder_filename .'"><i class="fa fa-trash-o"></i> &nbsp; '.$lang['Delete'].'</a></li>
                     </ul>
                  </div>
               </div>';   
@@ -211,6 +217,44 @@ Morfy::factory()->addAction('getBlogPages', function () {
     $html .= '<div class="clearfix"></div>';
     echo $html;
 });
+
+
+// Call plugin with  echo Morfy::factory()->runAction('getPortfolioPages');
+Morfy::factory()->addAction('getPortfolioPages', function () {
+    // require language
+    require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
+
+    $folder = 'portfolio'; // This is the name of folder
+
+
+    // show folder  files
+    $folder_path_dir = CONTENT_PATH.'/'.$folder;
+    $folder_files = Panel::File_scan($folder_path_dir);
+
+    $html = '<h5 class="divider">Portfolio:</h5>'; // this is the title 
+
+    foreach ($folder_files as $folder_file) {
+        if(is_file($folder_path_dir.'/'.$folder_file)){
+        // get blog pages    
+        $folder_filename =  str_replace('.md','',$folder_file);
+         $html .= '<div class="tumb-grid">
+            <a target="_blank" href="'.Morfy::$config['site_url'].'/'.$folder.'/'.$folder_filename .'" class="tumb">'.$folder_filename .'</a>
+             <div class="desc"> 
+                <ul>
+                    <li><a class="btn btn-primary btn-sm" href="?editFile='.$folder.'/'.$folder_filename .'"><i class="fa fa-edit"></i> &nbsp; '.$lang['Edit'].'</a></li>
+                    <li><a onclick="return confirmDelete(\' '.$lang['Are you sure'].'\')" class="btn btn-danger btn-sm" href="?deleteFile='.$folder.'/'.$folder_filename .'"><i class="fa fa-trash-o"></i> &nbsp; '.$lang['Delete'].'</a></li>
+                </ul>
+             </div>
+          </div>';   
+        }
+    }
+    $html .= '<div class="clearfix"></div>';
+    echo $html;
+});
+
+
+
+
 
 // Call plugin with Morfy::factory()->runAction('deleteImages');
 Morfy::factory()->addAction('deleteImages', function () {

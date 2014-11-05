@@ -30,11 +30,11 @@
 
     <!-- Header  -->
     <header class="header">
-        <a class="header-title pull-left" href="<?php echo Panel::Root('panel'); ?>">MORFY PANEL</a></h1>
+        <a class="header-title pull-left" href="<?php echo Panel::Root('panel'); ?>">MORFY PANEL</a>
         <div class="pull-right well-sm">
 
         <?php if (!empty($_SESSION['login'])){ ?>
-          <a href="?action=logout"><i class="fa fa-sign-out fa-2x"></i></a></a>
+          <a href="?action=logout"><i class="fa fa-sign-out fa-2x"></i></a>
         <?php } ?>
         
         </div>

@@ -9,12 +9,8 @@
  *  @version 1.0.0
  *
  */
-
 // define root in plugin
 define('ROOT',PLUGINS_PATH.'/panel/');
-
-
-
 // debug
 $debug = false;
 if($debug){
@@ -24,13 +20,8 @@ if($debug){
     ini_set('display_errors',0);  
     error_reporting(E_ALL);
 }
-
-
-
 // include class panel
 require('library/class/class.panel.php');
-
-
 // Call scripts and styles in theme header
 Morfy::factory()->addAction('theme_header', function () {
     $editor_styles = '
@@ -39,32 +30,20 @@ Morfy::factory()->addAction('theme_header', function () {
         <link rel="stylesheet" href="'.Morfy::$config['site_url'].'/plugins/panel/assets/css/panel.css" />
 		<script rel="javascript" src="'.Morfy::$config['site_url'].'/plugins/panel/assets/js/panel.js"></script>';
     // only load in panel
-    if (stripos($_SERVER['REQUEST_URI'], '/panel')) {
+     if(trim(Morfy::factory()->getUrl(), '/') == 'panel') {
         echo $editor_styles;
     };
 });
-
-
-
-
-
-
-
 Morfy::factory()->addAction('theme_content_after', function () {
-
     // require language
     require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
-
-    if (stripos($_SERVER['REQUEST_URI'], '/panel')) {
-       
+    if(trim(Morfy::factory()->getUrl(), '/') == 'panel') {
         Morfy::factory()->runAction('panel');
-
         // use default if empty in config.php
         $password = Panel::Config(Morfy::$config['password'],'demo');      
         $secret_key1 =  Panel::Config(Morfy::$config['secret_key_1'],'secret_key1');
         $secret_key2 =  Panel::Config(Morfy::$config['secret_key_2'],'secret_key2');
         $hash = md5($secret_key1.$password.$secret_key2); 
-
         // get actions
         if (Panel::Request_Get('action')) {
             $action = Panel::Request_Get('action');
@@ -77,9 +56,9 @@ Morfy::factory()->addAction('theme_content_after', function () {
                             Panel::Cookie_set('login',10);
                             Panel::isLogin();
                             // redirect if true
-                            Panel::Notification('Success',$lang['Hello Admin'],Panel::Root('panel'));
+                            Panel::Notification('success','Success',$lang['Hello Admin'],Panel::Root('panel'));
                     }else{
-                        Panel::Notification('Error',$lang['You need provide a password'],Panel::Root('panel'));
+                        Panel::Notification('error','Error',$lang['You need provide a password'],Panel::Root('panel'));
                     }
                 break;
                 case 'logout':
@@ -93,12 +72,6 @@ Morfy::factory()->addAction('theme_content_after', function () {
         Morfy::factory()->runAction('deleteImages');
     }
 });
-
-
-
-
-
-
 // Call plugin with  echo Morfy::factory()->runAction('files');
 Morfy::factory()->addAction('files', function () {
     // require language
@@ -115,7 +88,7 @@ Morfy::factory()->addAction('files', function () {
         if (!empty($file) || (!Panel::Request_Post('token'))) {
             unlink($file);
             // show Notification
-            Panel::Notification('Success',$lang['The File'].' '.Panel::Request_Get('deleteFile').' '.$lang['has been deleted'],Panel::Root('panel'));
+            Panel::Notification('success','Success',$lang['The File'].' '.Panel::Request_Get('deleteFile').' '.$lang['has been deleted'],Panel::Root('panel'));
         }
     }else if (Panel::Request_Get('saveFile')) {
         // get content
@@ -124,12 +97,16 @@ Morfy::factory()->addAction('files', function () {
         if(Panel::Request_Post('isBlog')){
             // save
             Panel::setContent(CONTENT_PATH.'/blog/'.Panel::seoLink($filename).'.md',$content);
+        }else if(Panel::Request_Post('isPortfolio')){
+            $folder = 'portfolio';
+            // save in folder
+            Panel::setContent(CONTENT_PATH.'/'.$folder.'/'.Panel::seoLink($filename).'.md',$content);
         }else{
             // save
             Panel::setContent(CONTENT_PATH.'/'.Panel::seoLink($filename).'.md',$content);
         }
         // show Notification
-        Panel::Notification('Success',$lang['The File'].' '.$filename.' '.$lang['has been save'],Panel::Root('panel'));
+        Panel::Notification('success','Success',$lang['The File'].' '.$filename.' '.$lang['has been save'],Panel::Root('panel'));
     }else if (Panel::Request_Get('updateFile')) {
         // name of file
         $filename = Panel::Request_Get('updateFile');
@@ -138,16 +115,13 @@ Morfy::factory()->addAction('files', function () {
         // save
         Panel::setContent(CONTENT_PATH.'/'.$filename.'.md',$content);
         // show Notification
-        Panel::Notification('Success',$lang['The File'].' '.$filename.' '.$lang['has been save'],Panel::Root('panel'));
+        Panel::Notification('success','Success',$lang['The File'].' '.$filename.' '.$lang['has been save'],Panel::Root('panel'));
     }else{
        Morfy::factory()->runAction('getPages');
        Morfy::factory()->runAction('getBlogPages');
+       Morfy::factory()->runAction('getPortfolioPages');
     }
 });
-
-
-
-
 // Call plugin with  echo Morfy::factory()->runAction('getPages');
 Morfy::factory()->addAction('getPages', function () {
     // require language
@@ -178,30 +152,27 @@ Morfy::factory()->addAction('getPages', function () {
     $html .= '<div class="clearfix"></div>';
     echo $html;
 });
-
-
-
-
 // Call plugin with  echo Morfy::factory()->runAction('getBlogPages');
 Morfy::factory()->addAction('getBlogPages', function () {
     // require language
     require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
+    $folder = 'blog'; // name of new folder here
     // show blog files
-    $blog_path_dir = CONTENT_PATH.'/blog';
-    $blog_files = Panel::File_scan($blog_path_dir);
+    $folder_path_dir = CONTENT_PATH.'/'.$folder;
+    $folder_files = Panel::File_scan($folder_path_dir);
     $html = '<h5 class="divider">'.$lang['Blog'].':</h5>';
-    foreach ($blog_files as $blog_file) {
-        if(is_file($blog_path_dir.'/'.$blog_file)){
+    foreach ($folder_files as $folder_file) {
+        if(is_file($folder_path_dir.'/'.$folder_file)){
             // get blog pages    
-            $blog_filename =  str_replace('.md','',$blog_file);
+            $folder_filename =  str_replace('.md','',$folder_file);
             // not show index
-            if($blog_filename != 'index'){
+            if($folder_filename != 'index'){
              $html .= '<div class="tumb-grid">
-                <a target="_blank" href="'.Morfy::$config['site_url'].'/blog/'.$blog_filename .'" class="tumb">'.$blog_filename .'</a>
+                <a target="_blank" href="'.Morfy::$config['site_url'].'/'.$folder.'/'.$folder_filename .'" class="tumb">'.$folder_filename .'</a>
                  <div class="desc"> 
                     <ul>
-                        <li><a class="btn btn-primary btn-sm" href="?editFile=blog/'.$blog_filename .'"><i class="fa fa-edit"></i> &nbsp; '.$lang['Edit'].'</a></li>
-                        <li><a onclick="return confirmDelete(\' '.$lang['Are you sure'].'\')" class="btn btn-danger btn-sm" href="?deleteFile=blog/'.$blog_filename .'"><i class="fa fa-trash-o"></i> &nbsp; '.$lang['Delete'].'</a></li>
+                        <li><a class="btn btn-primary btn-sm" href="?editFile='.$folder.'/'.$folder_filename .'"><i class="fa fa-edit"></i> &nbsp; '.$lang['Edit'].'</a></li>
+                        <li><a onclick="return confirmDelete(\' '.$lang['Are you sure'].'\')" class="btn btn-danger btn-sm" href="?deleteFile='.$folder.'/'.$folder_filename .'"><i class="fa fa-trash-o"></i> &nbsp; '.$lang['Delete'].'</a></li>
                     </ul>
                  </div>
               </div>';   
@@ -211,7 +182,33 @@ Morfy::factory()->addAction('getBlogPages', function () {
     $html .= '<div class="clearfix"></div>';
     echo $html;
 });
-
+// Call plugin with  echo Morfy::factory()->runAction('getPortfolioPages');
+Morfy::factory()->addAction('getPortfolioPages', function () {
+    // require language
+    require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
+    $folder = 'portfolio'; // This is the name of folder
+    // show folder  files
+    $folder_path_dir = CONTENT_PATH.'/'.$folder;
+    $folder_files = Panel::File_scan($folder_path_dir);
+    $html = '<h5 class="divider">Portfolio:</h5>'; // this is the title 
+    foreach ($folder_files as $folder_file) {
+        if(is_file($folder_path_dir.'/'.$folder_file)){
+        // get blog pages    
+        $folder_filename =  str_replace('.md','',$folder_file);
+         $html .= '<div class="tumb-grid">
+            <a target="_blank" href="'.Morfy::$config['site_url'].'/'.$folder.'/'.$folder_filename .'" class="tumb">'.$folder_filename .'</a>
+             <div class="desc"> 
+                <ul>
+                    <li><a class="btn btn-primary btn-sm" href="?editFile='.$folder.'/'.$folder_filename .'"><i class="fa fa-edit"></i> &nbsp; '.$lang['Edit'].'</a></li>
+                    <li><a onclick="return confirmDelete(\' '.$lang['Are you sure'].'\')" class="btn btn-danger btn-sm" href="?deleteFile='.$folder.'/'.$folder_filename .'"><i class="fa fa-trash-o"></i> &nbsp; '.$lang['Delete'].'</a></li>
+                </ul>
+             </div>
+          </div>';   
+        }
+    }
+    $html .= '<div class="clearfix"></div>';
+    echo $html;
+});
 // Call plugin with Morfy::factory()->runAction('deleteImages');
 Morfy::factory()->addAction('deleteImages', function () {
     // require language
@@ -222,48 +219,31 @@ Morfy::factory()->addAction('deleteImages', function () {
         unlink('public/images/full/'.Panel::Request_Get('deleteImage'));
         unlink('public/images/tumb/'.Panel::Request_Get('deleteImage'));
         // show Notification
-        Panel::Notification('Success',$lang['The File'].' '.Panel::Request_Get('deleteImage').' '.$lang['has been deleted'],Panel::Root('panel?get=images'));
+        Panel::Notification('success','Success',$lang['The File'].' '.Panel::Request_Get('deleteImage').' '.$lang['has been deleted'],Panel::Root('panel?get=images'));
     }
 });
-
-
 // Call plugin with  echo Morfy::factory()->runAction('add');
 Morfy::factory()->addAction('add', function () {
     // require language
     require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
     require_once('library/add.php');
 });
-
-
-
-
 // Call plugin with  echo Morfy::factory()->runAction('auth');
 Morfy::factory()->addAction('auth', function () {
     // require language
     require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
     require('library/login.php');
 });
-
-
-
 // Call plugin with  echo Morfy::factory()->runAction('panel');
 Morfy::factory()->addAction('panel', function () {
     // require language
     require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
     require('library/panel.php');
 });
-
-
-
-
 // Call plugin with  echo Morfy::factory()->runAction('content');
 Morfy::factory()->addAction('content', function () {
     // require language
     require('library/language/'.Panel::Config(Morfy::$config['Panel_lang'],'es').'.php');
     require('library/content.php');
 });
-
-
-
-
 ?>
